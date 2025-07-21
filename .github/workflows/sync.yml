@@ -8,9 +8,7 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    permissions: write-all
       
     steps:
       - name: Checkout Fork
@@ -45,15 +43,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          EXISTING_PR=$(gh pr list --head ${{ env.BRANCH_NAME }} --json number --jq '.[0].number')
-
-          if [ -z "$EXISTING_PR" ]; then
-            echo "Creating a new Pull Request"
-            gh pr create \
-              --title "Sync with vllm-project/vllm main on $(date +%Y-%m-%d)" \
-              --body "This PR was automatically created to sync changes from \`vllm-project/vllm\`'s main branch." \
-              --base main \
-              --head ${{ env.BRANCH_NAME }}
-          else
-            echo "Pull Request for branch ${{ env.BRANCH_NAME }} already exists: #$EXISTING_PR"
-          fi
+          gh pr create \
+            --title "Sync with vllm-project/vllm main on $(date +%Y-%m-%d)" \
+            --body "This PR was automatically created to sync changes from \`vllm-project/vllm\`'s main branch." \
+            --base main \
+            --head ${{ env.BRANCH_NAME }}
