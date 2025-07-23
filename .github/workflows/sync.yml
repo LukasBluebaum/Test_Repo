@@ -45,6 +45,8 @@ jobs:
           git push -u origin ${{ env.BRANCH_NAME }} --force
 
       - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           EXISTING_PR=$(gh pr list --head ${{ env.BRANCH_NAME }} --json number --jq '.[0].number')
 
